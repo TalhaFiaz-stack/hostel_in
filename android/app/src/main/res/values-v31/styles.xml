@@ -1,0 +1,11 @@
+<resources>
+    <style name="BootTheme" parent="Theme.BootSplash">
+        <item name="bootSplashBackground">@color/bootsplash_background</item>
+        <item name="bootSplashLogo">@drawable/bootsplash_logo</item>
+        <item name="postBootSplashTheme">@style/AppTheme</item>
+
+        <!-- Android 12+ specific items -->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/bootsplash_logo</item>
+        <item name="android:windowSplashScreenBackground">@color/bootsplash_background</item>
+    </style>
+</resources>

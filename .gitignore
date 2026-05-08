@@ -1,4 +1,4 @@
-# OSX
+js format# OSX
 #
 .DS_Store
 
@@ -92,7 +92,7 @@ yarn-error.log
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
+*.slnetc 
 *.sw?
 
 # TypeScript

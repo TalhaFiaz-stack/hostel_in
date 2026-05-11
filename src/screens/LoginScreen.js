@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Image,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { colors, spacing, typography } from '../theme';
@@ -14,14 +15,15 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { validateEmail } from '../utils/validation';
 
-const LoginScreen = ({navigation}) => {
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
 
   const handleEmailChange = (text) => {
     setEmail(text);
-    // If there was an error, re-validate as the user types
     if (emailError) {
       const validation = validateEmail(text);
       setEmailError(validation.error);
@@ -30,185 +32,264 @@ const LoginScreen = ({navigation}) => {
 
   const handleLogin = () => {
     const emailValidation = validateEmail(email);
-    
     if (!emailValidation.isValid) {
       setEmailError(emailValidation.error);
       return;
     }
-
-    // Proceed with login
     navigation.replace('Home');
   };
 
   return (
-    <View style={styles.container}>
-      <KeyboardAvoidingView style={styles.keyboardView}>
-        
-        <ScrollView 
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled">
-          
-          <View style={styles.section}>
-            <Image 
-              source={require('../assets/logo2.png')} 
-              style={styles.logo}
-              resizeMode="contain"
-            />
-          </View>
+    <View style={styles.root}>
+      {/* ──────── HERO / TOP SECTION ──────── */}
+      <View style={styles.hero}>
+        <View style={styles.circle1} />
+        <View style={styles.circle2} />
 
-          <View style={styles.section}>
-            <Text style={styles.title}>Welcome Back</Text>
-            <Text style={styles.subtitle}>Sign in to continue to HostelIn</Text>
-          </View>
+        <View style={styles.heroContent}>
+          <Image
+            source={require('../assets/logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+          <Text style={styles.appName}>HostelIn</Text>
+          <Text style={styles.tagline}>Your perfect stay, just a tap away.</Text>
+        </View>
+      </View>
 
-          <View style={styles.section}>
-            <CustomInput
-              label="Email Address"
-              placeholder="name@company.com"
-              value={email}
-              onChangeText={handleEmailChange}
-              error={emailError}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
+      {/* ──────── FORM CARD ──────── */}
+      <KeyboardAvoidingView style={styles.cardWrapper} behavior={null}>
+        <View style={styles.card}>
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled">
 
-            <CustomInput
-              label="Password"
-              placeholder="••••••••"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-
-            <TouchableOpacity style={styles.forgotPassword}>
-              <Text style={styles.forgotText}>Forgot password?</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.section}>
-            <CustomButton 
-              title="Sign In"
-              onPress={handleLogin}
-            />
-          </View>
-
-          <View style={styles.section}>
-            <View style={styles.dividerContainer}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>Or continue with</Text>
-              <View style={styles.dividerLine} />
+            <View style={styles.section}>
+              <Text style={styles.cardTitle}>Sign in</Text>
+              <Text style={styles.cardSub}>Enter your credentials to continue</Text>
             </View>
 
-            <View style={styles.socialContainer}>
-              <TouchableOpacity style={styles.socialButton}>
-                <Icon name="google" size={24} color="#DB4437" />
-              </TouchableOpacity>
+            {/* ── Inputs ── */}
+            <View style={styles.section}>
+              <CustomInput
+                label="Email"
+                placeholder="hello@example.com"
+                iconName="envelope"
+                value={email}
+                onChangeText={handleEmailChange}
+                error={emailError}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
 
-              <TouchableOpacity style={styles.socialButton}>
-                <Icon name="facebook" size={24} color="#4267B2" />
+              <CustomInput
+                label="Password"
+                placeholder="••••••••"
+                iconName="lock"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+
+              <TouchableOpacity style={styles.forgotRow}>
+                <Text style={styles.forgotText}>Forgot password?</Text>
               </TouchableOpacity>
             </View>
-          </View>
 
-          <View style={styles.footerSection}>
-            <Text style={styles.footerText}>Don't have an account? </Text>
-            <TouchableOpacity>
-              <Text style={styles.signUpText}>Create account</Text>
-            </TouchableOpacity>
-          </View>
+            {/* ── Primary CTA ── */}
+            <View style={styles.section}>
+              <CustomButton title="Sign In" onPress={handleLogin} />
+            </View>
 
-        </ScrollView>
+            {/* ── Divider ── */}
+            <View style={styles.section}>
+              <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerLabel}>or sign in with</Text>
+                <View style={styles.dividerLine} />
+              </View>
+            </View>
+
+            {/* ── Social ── */}
+            <View style={styles.section}>
+              <View style={styles.socialRow}>
+                <TouchableOpacity style={[styles.socialBtn, styles.googleBtn]}>
+                  <Icon name="google" size={18} color="#EA4335" />
+                  <Text style={[styles.socialLabel, { color: '#EA4335' }]}>Google</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.socialBtn, styles.fbBtn]}>
+                  <Icon name="facebook" size={18} color="#1877F2" />
+                  <Text style={[styles.socialLabel, { color: '#1877F2' }]}>Facebook</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* ── Footer ── */}
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>No account? </Text>
+              <TouchableOpacity>
+                <Text style={styles.footerLink}>Create one →</Text>
+              </TouchableOpacity>
+            </View>
+
+          </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.primary,
   },
-  keyboardView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: spacing.content,
-    paddingVertical: spacing.xxl,
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
-  section: {
-    marginBottom: spacing.lg,
-    width: '100%',
+  hero: {
+    height: SCREEN_HEIGHT * 0.35,
+    backgroundColor: colors.primary,
+    overflow: 'hidden',
+    justifyContent: 'center', // Centered logo
     alignItems: 'center',
+  },
+  circle1: {
+    position: 'absolute',
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    top: -100,
+    right: -60,
+  },
+  circle2: {
+    position: 'absolute',
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    bottom: -50,
+    left: -40,
+  },
+  heroContent: {
+    alignItems: 'center',
+    zIndex: 1,
   },
   logo: {
-    width: 140,
-    height: 80,
+    width: 160, // Bigger logo
+    height: 70,
+    marginBottom: spacing.sm,
   },
-  title: {
-    fontSize: typography.size.h2,
+  appName: {
+    fontSize: 32,
+    fontWeight: typography.weight.black,
+    color: '#FFFFFF',
+    letterSpacing: -1,
+  },
+  tagline: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.8)',
+    fontWeight: typography.weight.medium,
+    marginTop: 4,
+  },
+  cardWrapper: {
+    flex: 1,
+  },
+  card: {
+    flex: 1,
+    backgroundColor: '#FFFFFF', // Clean white background
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    marginTop: -32,
+    paddingTop: spacing.xl,
+    elevation: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+  },
+  scrollContent: {
+    paddingHorizontal: spacing.xl,
+    paddingBottom: spacing.xxl,
+  },
+  section: {
+    marginBottom: spacing.lg, // Consistent spacing throughout
+    width: '100%',
+  },
+  cardTitle: {
+    fontSize: 26,
     fontWeight: typography.weight.bold,
     color: colors.text.primary,
-    marginBottom: spacing.xs,
-    letterSpacing: typography.letterSpacing.tight,
+    marginBottom: 4,
   },
-  subtitle: {
-    fontSize: typography.size.body,
+  cardSub: {
+    fontSize: 14,
     color: colors.text.secondary,
-    textAlign: 'center',
+    fontWeight: typography.weight.medium,
   },
-  forgotPassword: {
+  forgotRow: {
     alignSelf: 'flex-end',
+    marginTop: spacing.xs,
   },
   forgotText: {
-    fontSize: typography.size.small,
-    fontWeight: typography.weight.medium,
+    fontSize: 13,
+    fontWeight: typography.weight.semiBold,
     color: colors.primary,
   },
-  dividerContainer: {
+  divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.lg,
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: colors.border,
+    backgroundColor: '#E2E8F0',
   },
-  dividerText: {
+  dividerLabel: {
     marginHorizontal: spacing.md,
+    fontSize: 12,
+    fontWeight: typography.weight.bold,
+    color: '#94A3B8',
+    textTransform: 'uppercase',
+  },
+  socialRow: {
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  socialBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    borderRadius: 14,
+    gap: 8,
+    borderWidth: 1.5,
+    backgroundColor: '#FFFFFF',
+  },
+  googleBtn: {
+    borderColor: '#FEE2E2',
+  },
+  fbBtn: {
+    borderColor: '#DBEAFE',
+  },
+  socialLabel: {
+    fontSize: 14,
+    fontWeight: typography.weight.semiBold,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: spacing.md,
+  },
+  footerText: {
     fontSize: 14,
     color: colors.text.secondary,
   },
-  socialContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: spacing.lg,
-  },
-  socialButton: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.background,
-  },
-  footerSection: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  footerText: {
-    fontSize: typography.size.small,
-    color: colors.text.secondary,
-  },
-  signUpText: {
-    fontSize: typography.size.small,
-    fontWeight: typography.weight.semiBold,
+  footerLink: {
+    fontSize: 14,
+    fontWeight: typography.weight.bold,
     color: colors.primary,
   },
 });

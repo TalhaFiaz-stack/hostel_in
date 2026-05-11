@@ -10,6 +10,8 @@ import BootSplash from 'react-native-bootsplash';
 import AppNavigator from './src/navigation/AppNavigator';
 import {colors} from './src/theme';
 
+import { OnboardingProvider } from './src/context/OnboardingContext';
+
 const App = () => {
   useEffect(() => {
     const init = async () => {
@@ -25,7 +27,9 @@ const App = () => {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
         <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-        <AppNavigator />
+        <OnboardingProvider>
+          <AppNavigator />
+        </OnboardingProvider>
       </SafeAreaView>
     </SafeAreaProvider>
   );

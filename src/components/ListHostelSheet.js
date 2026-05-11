@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { colors, spacing, typography } from '../theme';
+import { colors, typography } from '../theme';
 
 const ListHostelSheet = ({ sheetRef, onListPress }) => {
   return (
@@ -11,6 +11,9 @@ const ListHostelSheet = ({ sheetRef, onListPress }) => {
       closeOnDragDown={true}
       closeOnPressMask={true}
       height={360}
+      customModalProps={{
+        statusBarTranslucent: true, // covers everything on Android including tab bar
+      }}
       customStyles={{
         wrapper: {
           backgroundColor: 'rgba(0,0,0,0.5)',
@@ -23,7 +26,7 @@ const ListHostelSheet = ({ sheetRef, onListPress }) => {
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           paddingHorizontal: 24,
-          paddingBottom: 80, // Increased even more to lift content up
+          paddingBottom: 0, // no bottom padding — sheet sits flush to screen bottom
         },
       }}
     >
@@ -39,7 +42,8 @@ const ListHostelSheet = ({ sheetRef, onListPress }) => {
         </View>
 
         <Text style={styles.description}>
-          Join Pakistan's largest hostel network and reach thousands of students and professionals looking for quality accommodation.
+          Join Pakistan's largest hostel network and reach thousands of students
+          and professionals looking for quality accommodation.
         </Text>
 
         <TouchableOpacity
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
     paddingTop: 8,
-    paddingBottom: 40, // Managing the bottom space via padding
+    // paddingBottom: 16, // just enough breathing room, no excess
   },
   header: {
     alignItems: 'center',
